@@ -133,7 +133,7 @@
   .file-badge.editing { background: rgba(63,185,80,0.15); color: #3fb950; }
 
   /* Editor area */
-  .editor-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .editor-area { display: flex; flex-direction: column; overflow: hidden; }
 
   /* Toolbar */
   .toolbar {
@@ -401,6 +401,240 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   }
   .version-toast svg { color: #4493f8; }
+
+  /* Option nav */
+  .option-nav {
+    display: flex;
+    gap: 4px;
+    padding: 8px 16px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+  }
+  .option-btn {
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #21262d;
+    color: #9198a1;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .option-btn:hover { background: #30363d; color: #e6edf3; }
+  .option-btn.active { background: #4493f8; border-color: #4493f8; color: #fff; }
+  .mockup-section { display: none; }
+  .mockup-section.active { display: flex; flex: 1; flex-direction: column; }
+
+  /* Narrative cards */
+  .narrative {
+    padding: 20px 24px;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+  }
+  .narrative h3 { font-size: 14px; margin-bottom: 12px; color: #e6edf3; }
+  .narrative-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .narrative-card { background: #21262d; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; }
+  .narrative-card h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .narrative-card.pros h4 { color: #3fb950; }
+  .narrative-card.cons h4 { color: #f85149; }
+  .narrative-card ul { margin: 0; padding-left: 16px; font-size: 13px; color: #9198a1; line-height: 1.6; }
+
+  /* Editor sections wrapper */
+  .editor-sections { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Rich text editor (Section B) */
+  .rt-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 16px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .rt-toolbar-btn {
+    height: 28px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #9198a1;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    gap: 4px;
+  }
+  .rt-toolbar-btn:hover { background: #21262d; color: #e6edf3; }
+  .rt-toolbar-btn.active { background: #30363d; color: #e6edf3; }
+  .rt-toolbar-sep {
+    width: 1px;
+    height: 16px;
+    background: #30363d;
+    margin: 0 6px;
+  }
+  .rt-toolbar-dropdown {
+    height: 28px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #30363d;
+    background: #21262d;
+    color: #9198a1;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .rt-toolbar-dropdown:hover { background: #30363d; color: #e6edf3; }
+
+  .rt-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 48px;
+    background: #0d1117;
+  }
+  .rt-content h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #e6edf3;
+  }
+  .rt-content h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    color: #e6edf3;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #30363d;
+  }
+  .rt-content p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #c9d1d9;
+    margin-bottom: 14px;
+  }
+  .rt-content ul, .rt-content ol {
+    margin: 0 0 14px 8px;
+    padding-left: 20px;
+    color: #c9d1d9;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .rt-content li { margin-bottom: 2px; }
+  .rt-content code {
+    background: #21262d;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #a371f7;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  .rt-content a {
+    color: #4493f8;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .rt-content a:hover { border-bottom-color: #4493f8; }
+  .rt-content strong { color: #e6edf3; font-weight: 600; }
+  .rt-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .rt-content th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid #30363d;
+    color: #e6edf3;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .rt-content td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #21262d;
+    color: #c9d1d9;
+    font-size: 14px;
+  }
+  .rt-content .meta-line {
+    font-size: 14px;
+    color: #9198a1;
+    margin-bottom: 4px;
+  }
+
+  /* Inline collaborator cursors for rich text */
+  .rt-cursor {
+    position: relative;
+    display: inline;
+    border-left: 2px solid;
+    margin-left: 1px;
+    margin-right: 1px;
+  }
+  .rt-cursor-jd { border-color: #4493f8; }
+  .rt-cursor-sk { border-color: #a371f7; }
+  .rt-cursor-label {
+    position: absolute;
+    top: -18px;
+    left: -1px;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .rt-cursor-jd .rt-cursor-label { background: #4493f8; }
+  .rt-cursor-sk .rt-cursor-label { background: #a371f7; }
+
+  /* Floating toolbar */
+  .floating-toolbar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #2d333b;
+    border: 1px solid #444c56;
+    border-radius: 8px;
+    padding: 4px 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 50;
+  }
+  .floating-toolbar-btn {
+    width: 28px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #adbac7;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .floating-toolbar-btn:hover { background: #444c56; color: #e6edf3; }
+  .floating-toolbar-btn.active { background: #444c56; color: #e6edf3; }
+  .floating-toolbar-sep {
+    width: 1px;
+    height: 16px;
+    background: #444c56;
+    margin: 0 2px;
+  }
+  .rt-selection {
+    background: rgba(68,147,248,0.25);
+    border-radius: 2px;
+    padding: 1px 0;
+  }
+  .rt-overview-wrap {
+    position: relative;
+  }
 </style>
 </head>
 <body>
@@ -430,6 +664,12 @@
       Share
     </button>
   </div>
+</div>
+
+<!-- Option Nav -->
+<div class="option-nav">
+  <button class="option-btn active" onclick="show('a')">A. Split View</button>
+  <button class="option-btn" onclick="show('b')">B. Rich Text</button>
 </div>
 
 <div class="main">
@@ -467,8 +707,10 @@
     </div>
   </div>
 
-  <!-- Editor Area -->
-  <div class="editor-area">
+  <!-- Editor Sections -->
+  <div class="editor-sections">
+    <!-- Section A: Split View -->
+    <div class="mockup-section active" id="section-a">
     <!-- Toolbar -->
     <div class="toolbar">
       <button class="toolbar-btn" title="Bold"><strong>B</strong></button>
@@ -582,7 +824,161 @@
         </ol>
       </div>
     </div>
-  </div>
+
+    <!-- Narrative: Split View -->
+    <div class="narrative">
+      <h3>A. Split View (Source + Preview)</h3>
+      <div class="narrative-grid">
+        <div class="narrative-card pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Full control over markdown syntax</li>
+            <li>Power users can write complex documents</li>
+            <li>Familiar to developers</li>
+          </ul>
+        </div>
+        <div class="narrative-card cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Steeper learning curve for non-technical users</li>
+            <li>Takes more horizontal space</li>
+            <li>Context switching between source and preview</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div><!-- end section-a -->
+
+    <!-- Section B: Rich Text WYSIWYG -->
+    <div class="mockup-section" id="section-b">
+      <!-- Rich Text Toolbar -->
+      <div class="rt-toolbar">
+        <button class="rt-toolbar-btn" title="Undo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+        <button class="rt-toolbar-btn" title="Redo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleX(-1)"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-dropdown" title="Text style">
+          <span>Normal text</span>
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"/></svg>
+        </button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-btn active" title="Bold"><strong>B</strong></button>
+        <button class="rt-toolbar-btn" title="Italic"><em>I</em></button>
+        <button class="rt-toolbar-btn" title="Underline" style="text-decoration:underline;">U</button>
+        <button class="rt-toolbar-btn" title="Strikethrough"><s>S</s></button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-btn" title="Text color">
+          <span style="border-bottom:2.5px solid #e6edf3;padding-bottom:1px;font-weight:600;">A</span>
+        </button>
+        <button class="rt-toolbar-btn" title="Highlight color">
+          <span style="background:#d29922;color:#0d1117;padding:0 3px;border-radius:2px;font-size:11px;font-weight:700;">A</span>
+        </button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-btn" title="Bullet list">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm3.75-1.5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5ZM3 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        </button>
+        <button class="rt-toolbar-btn" title="Numbered list">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2.003 2.5a.5.5 0 0 0-.723-.447l-1.003.5a.5.5 0 0 0 .446.895l.28-.14V6H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-.497V2.5Zm3.747 0a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z"/></svg>
+        </button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-btn" title="Code">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"/></svg>
+        </button>
+        <button class="rt-toolbar-btn" title="Link">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"/></svg>
+        </button>
+        <span class="rt-toolbar-sep"></span>
+        <button class="rt-toolbar-btn" title="Insert table">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Zm-3.5 1.5v7.75c0 .138.112.25.25.25H5V6.5Z"/></svg>
+        </button>
+        <button class="rt-toolbar-btn" title="Insert image">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M16 13.25A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25V2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75ZM1.75 2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h.94l3.88-6.46a1 1 0 0 1 1.72.04L10.3 11l1.07-1.78a1 1 0 0 1 1.71.02L14.98 13h.27a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM6 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
+        </button>
+      </div>
+
+      <!-- Rich Text Content -->
+      <div class="rt-content">
+        <h1>Product Launch Plan</h1>
+        <p class="meta-line">Target launch date: <strong>March 28, 2026</strong></p>
+        <p class="meta-line" style="margin-bottom:20px;">Status: <code>In Progress</code></p>
+
+        <h2>Overview</h2>
+        <div class="rt-overview-wrap">
+          <p>This document outlines the launch plan for the collaborative markdown editor. The editor supports <span class="rt-selection">real-time collaboration</span>, version history, and inline commenting.<span class="rt-cursor rt-cursor-jd"><span class="rt-cursor-label">Jamie D.</span></span></p>
+          <!-- Floating toolbar over selected text -->
+          <div class="floating-toolbar" style="top: 0px; left: 300px;">
+            <button class="floating-toolbar-btn active"><strong>B</strong></button>
+            <button class="floating-toolbar-btn"><em>I</em></button>
+            <span class="floating-toolbar-sep"></span>
+            <button class="floating-toolbar-btn">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Z"/></svg>
+            </button>
+            <button class="floating-toolbar-btn" style="font-family:monospace;font-size:11px;">&lt;/&gt;</button>
+            <span class="floating-toolbar-sep"></span>
+            <span style="width:14px;height:14px;border-radius:3px;background:#4493f8;display:inline-block;vertical-align:middle;"></span>
+          </div>
+        </div>
+
+        <h2>Key Features</h2>
+        <ul>
+          <li>Real-time cursor presence and selections</li>
+          <li>Inline threaded comments on any line</li>
+          <li><span class="selection-sk">Version history with diff view</span><span class="rt-cursor rt-cursor-sk"><span class="rt-cursor-label">Sam K.</span></span></li>
+          <li>Split-pane editing (source + preview)</li>
+          <li>File tree with multi-doc workspaces</li>
+          <li>Markdown toolbar with shortcuts</li>
+        </ul>
+
+        <h2>Timeline</h2>
+        <table>
+          <tr>
+            <th>Phase</th>
+            <th>Status</th>
+          </tr>
+          <tr><td>Core editor engine</td><td><code>Done</code></td></tr>
+          <tr><td>Real-time sync (CRDT)</td><td><code>Done</code></td></tr>
+          <tr><td>Comments and threads</td><td><code>In Progress</code></td></tr>
+          <tr><td>Version history</td><td><code>In Progress</code></td></tr>
+          <tr><td>Permissions and sharing</td><td><code>Not Started</code></td></tr>
+          <tr><td>Beta launch</td><td><code>Not Started</code></td></tr>
+        </table>
+
+        <h2>Open Questions</h2>
+        <ol>
+          <li>Should we support <a href="https://mermaid.js.org">Mermaid diagrams</a>?</li>
+          <li>Offline-first or always-online for v1?</li>
+          <li>Export to PDF/DOCX in scope for launch?</li>
+        </ol>
+      </div>
+
+      <!-- Narrative: Rich Text -->
+      <div class="narrative">
+        <h3>B. Rich Text (WYSIWYG)</h3>
+        <div class="narrative-grid">
+          <div class="narrative-card pros">
+            <h4>Pros</h4>
+            <ul>
+              <li>Intuitive for all users</li>
+              <li>Cleaner interface</li>
+              <li>What-you-see-is-what-you-get</li>
+            </ul>
+          </div>
+          <div class="narrative-card cons">
+            <h4>Cons</h4>
+            <ul>
+              <li>Less control over formatting details</li>
+              <li>Harder to do advanced markdown (footnotes, custom HTML)</li>
+              <li>May abstract away the document structure</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div><!-- end section-b -->
+
+  </div><!-- end editor-sections -->
 
   <!-- Comments Panel -->
   <div class="comments-panel">
@@ -662,6 +1058,15 @@
   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0ZM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm.5 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 .37.65l2.5 1.5a.75.75 0 1 0 .76-1.3L8.5 7.96V4.75Z"/></svg>
   Auto-saved &middot; 47 versions &middot; Last edit by Jamie D.
 </div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.mockup-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
 
 </body>
 </html>
