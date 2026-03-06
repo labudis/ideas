@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collaborative Markdown Editor - Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .doc-icon { color: #4493f8; }
+  .doc-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+  .doc-status {
+    font-size: 11px;
+    color: #7d8590;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .doc-status .dot {
+    width: 6px; height: 6px;
+    background: #3fb950;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #21262d;
+    color: #e6edf3;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: #30363d; }
+  .btn-primary {
+    background: #238636;
+    border-color: rgba(240,246,252,0.1);
+  }
+  .btn-primary:hover { background: #2ea043; }
+
+  /* Collaborator avatars */
+  .avatars { display: flex; align-items: center; margin-right: 8px; }
+  .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid #0d1117;
+    margin-left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .avatar:first-child { margin-left: 0; }
+  .avatar-jd { background: #4493f8; }
+  .avatar-sk { background: #a371f7; }
+  .avatar-ml { background: #d29922; }
+  .avatar-you { background: #3fb950; }
+
+  /* Main layout */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    background: #161b22;
+    border-right: 1px solid #30363d;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+  .sidebar-header {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9198a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #30363d;
+  }
+  .file-tree { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #9198a1;
+    cursor: pointer;
+  }
+  .file-item:hover { background: #21262d; color: #e6edf3; }
+  .file-item.active { background: #21262d; color: #e6edf3; }
+  .file-item svg { flex-shrink: 0; }
+  .file-folder { font-weight: 600; color: #e6edf3; }
+  .file-indent { padding-left: 32px; }
+  .file-badge {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: #30363d;
+    color: #7d8590;
+  }
+  .file-badge.editing { background: rgba(63,185,80,0.15); color: #3fb950; }
+
+  /* Editor area */
+  .editor-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 16px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    flex-shrink: 0;
+  }
+  .toolbar-btn {
+    width: 32px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #9198a1;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .toolbar-btn:hover { background: #21262d; color: #e6edf3; }
+  .toolbar-sep {
+    width: 1px;
+    height: 16px;
+    background: #30363d;
+    margin: 0 6px;
+  }
+  .toolbar-tabs {
+    margin-left: auto;
+    display: flex;
+    gap: 0;
+    background: #21262d;
+    border-radius: 6px;
+    padding: 2px;
+  }
+  .toolbar-tab {
+    padding: 4px 12px;
+    font-size: 12px;
+    border: none;
+    background: transparent;
+    color: #7d8590;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .toolbar-tab.active { background: #30363d; color: #e6edf3; }
+  .toolbar-tab:hover { color: #e6edf3; }
+
+  /* Editor + preview split */
+  .editor-split { display: flex; flex: 1; overflow: hidden; }
+  .editor-pane, .preview-pane { flex: 1; overflow-y: auto; }
+  .editor-pane { border-right: 1px solid #30363d; position: relative; }
+
+  /* Code editor lines */
+  .code-editor { padding: 16px 0; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 13px; line-height: 20px; }
+  .code-line {
+    display: flex;
+    padding: 0 16px;
+    min-height: 20px;
+  }
+  .code-line:hover { background: rgba(110,118,129,0.04); }
+  .line-num {
+    width: 40px;
+    text-align: right;
+    color: #484f58;
+    user-select: none;
+    flex-shrink: 0;
+    padding-right: 12px;
+  }
+  .line-content { flex: 1; white-space: pre-wrap; word-break: break-word; }
+
+  /* Syntax highlights */
+  .md-h1 { color: #e6edf3; font-weight: 700; font-size: 15px; }
+  .md-h2 { color: #e6edf3; font-weight: 700; font-size: 14px; }
+  .md-h3 { color: #e6edf3; font-weight: 600; }
+  .md-bold { color: #e6edf3; font-weight: 700; }
+  .md-link { color: #4493f8; }
+  .md-code { color: #a371f7; background: rgba(110,118,129,0.1); padding: 1px 4px; border-radius: 3px; }
+  .md-list { color: #d29922; }
+  .md-text { color: #9198a1; }
+  .md-comment { color: #484f58; }
+  .md-fence { color: #a371f7; }
+
+  /* Cursor indicators for collaborators */
+  .collab-cursor {
+    position: relative;
+    display: inline;
+  }
+  .collab-cursor::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 0;
+    width: 2px;
+    height: 18px;
+    border-radius: 1px;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  .collab-cursor .cursor-label {
+    position: absolute;
+    top: -16px;
+    left: -1px;
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #fff;
+    white-space: nowrap;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 500;
+  }
+  .cursor-jd::before, .cursor-jd .cursor-label { background: #4493f8; }
+  .cursor-sk::before, .cursor-sk .cursor-label { background: #a371f7; }
+
+  /* Selection highlights */
+  .selection-jd { background: rgba(68,147,248,0.15); border-radius: 2px; }
+  .selection-sk { background: rgba(163,113,247,0.15); border-radius: 2px; }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Preview pane */
+  .preview-pane {
+    padding: 24px 32px;
+    background: #0d1117;
+  }
+  .preview-pane h1 { font-size: 24px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #30363d; }
+  .preview-pane h2 { font-size: 20px; margin: 20px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #30363d; }
+  .preview-pane h3 { font-size: 16px; margin: 16px 0 6px; }
+  .preview-pane p { color: #9198a1; font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+  .preview-pane ul { margin: 0 0 12px 20px; color: #9198a1; font-size: 14px; line-height: 1.8; }
+  .preview-pane code { background: #21262d; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #a371f7; }
+  .preview-pane a { color: #4493f8; text-decoration: none; }
+  .preview-pane a:hover { text-decoration: underline; }
+
+  /* Comments panel */
+  .comments-panel {
+    width: 280px;
+    background: #161b22;
+    border-left: 1px solid #30363d;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+  .comments-header {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9198a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .comment-count {
+    background: #30363d;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: #7d8590;
+  }
+  .comments-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .comment {
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .comment-avatar {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .comment-author { font-size: 12px; font-weight: 600; }
+  .comment-time { font-size: 11px; color: #7d8590; margin-left: auto; }
+  .comment-body { font-size: 13px; color: #9198a1; line-height: 1.5; }
+  .comment-line-ref {
+    font-size: 11px;
+    color: #7d8590;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .comment-resolved {
+    opacity: 0.5;
+  }
+  .comment-resolved .comment-body { text-decoration: line-through; }
+  .comment-input-wrap {
+    padding: 8px;
+    border-top: 1px solid #30363d;
+  }
+  .comment-input {
+    width: 100%;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: #e6edf3;
+    font-size: 13px;
+    resize: none;
+    font-family: inherit;
+    outline: none;
+  }
+  .comment-input:focus { border-color: #4493f8; }
+  .comment-input::placeholder { color: #484f58; }
+
+  /* Bottom bar */
+  .bottombar {
+    display: flex;
+    align-items: center;
+    padding: 4px 16px;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+    font-size: 11px;
+    color: #7d8590;
+    gap: 16px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+  .bottombar-item { display: flex; align-items: center; gap: 4px; }
+  .bottombar-right { margin-left: auto; display: flex; gap: 16px; }
+
+  /* Presence indicator */
+  .presence-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .presence-dot.online { background: #3fb950; }
+
+  /* Version history toast */
+  .version-toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #9198a1;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .version-toast svg { color: #4493f8; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <svg class="doc-icon" width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+    <div>
+      <div class="doc-title">product-launch-plan.md</div>
+      <div class="doc-status"><span class="dot"></span> Saved 2s ago</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="avatars">
+      <div class="avatar avatar-you" title="You">You</div>
+      <div class="avatar avatar-jd" title="Jamie D.">JD</div>
+      <div class="avatar avatar-sk" title="Sam K.">SK</div>
+      <div class="avatar avatar-ml" title="Morgan L.">ML</div>
+    </div>
+    <button class="btn">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0ZM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm.5 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 .37.65l2.5 1.5a.75.75 0 1 0 .76-1.3L8.5 7.96V4.75Z"/></svg>
+      History
+    </button>
+    <button class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.823.177 4.927 3.073a.25.25 0 0 0 .177.427H7.25v5.75a.75.75 0 0 0 1.5 0V3.5h2.146a.25.25 0 0 0 .177-.427L8.177.177a.25.25 0 0 0-.354 0ZM3.75 11a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z"/></svg>
+      Share
+    </button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- File Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">Files</div>
+    <div class="file-tree">
+      <div class="file-item file-folder">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#9198a1"><path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.464 0 .909.184 1.237.513l.961.961H13.25c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 13.25 14.5H1.75A1.75 1.75 0 0 1 0 12.75V2.75c0-.464.184-.909.513-1.237Z"/></svg>
+        docs/
+      </div>
+      <div class="file-item file-indent active">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#4493f8"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+        product-launch-plan.md
+        <span class="file-badge editing">3 editing</span>
+      </div>
+      <div class="file-item file-indent">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#9198a1"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+        api-reference.md
+      </div>
+      <div class="file-item file-indent">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#9198a1"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+        changelog.md
+      </div>
+      <div class="file-item file-folder">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#9198a1"><path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.464 0 .909.184 1.237.513l.961.961H13.25c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 13.25 14.5H1.75A1.75 1.75 0 0 1 0 12.75V2.75c0-.464.184-.909.513-1.237Z"/></svg>
+        meeting-notes/
+      </div>
+      <div class="file-item file-indent">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#9198a1"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+        2026-03-04-kickoff.md
+        <span class="file-badge">1 viewing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editor Area -->
+  <div class="editor-area">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="toolbar-btn" title="Bold"><strong>B</strong></button>
+      <button class="toolbar-btn" title="Italic"><em>I</em></button>
+      <button class="toolbar-btn" title="Strikethrough"><s>S</s></button>
+      <span class="toolbar-sep"></span>
+      <button class="toolbar-btn" title="Heading">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M3.75 2a.75.75 0 0 1 .75.75V7h7V2.75a.75.75 0 0 1 1.5 0v10.5a.75.75 0 0 1-1.5 0V8.5h-7v4.75a.75.75 0 0 1-1.5 0V2.75A.75.75 0 0 1 3.75 2Z"/></svg>
+      </button>
+      <button class="toolbar-btn" title="List">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm3.75-1.5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Zm0 5a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5ZM3 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+      </button>
+      <button class="toolbar-btn" title="Code">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"/></svg>
+      </button>
+      <button class="toolbar-btn" title="Link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"/></svg>
+      </button>
+      <span class="toolbar-sep"></span>
+      <button class="toolbar-btn" title="Table">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Zm-3.5 1.5v7.75c0 .138.112.25.25.25H5V6.5Z"/></svg>
+      </button>
+      <div class="toolbar-tabs">
+        <button class="toolbar-tab active">Edit</button>
+        <button class="toolbar-tab">Preview</button>
+        <button class="toolbar-tab">Split</button>
+      </div>
+    </div>
+
+    <!-- Split view: editor + preview -->
+    <div class="editor-split">
+      <!-- Code Editor -->
+      <div class="editor-pane">
+        <div class="code-editor">
+          <div class="code-line"><span class="line-num">1</span><span class="line-content md-h1"># Product Launch Plan</span></div>
+          <div class="code-line"><span class="line-num">2</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">3</span><span class="line-content md-text">Target launch date: <span class="md-bold">**March 28, 2026**</span></span></div>
+          <div class="code-line"><span class="line-num">4</span><span class="line-content md-text">Status: <span class="md-code">`In Progress`</span></span></div>
+          <div class="code-line"><span class="line-num">5</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">6</span><span class="line-content md-h2">## Overview</span></div>
+          <div class="code-line"><span class="line-num">7</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">8</span><span class="line-content md-text">This document outlines the launch plan for the collaborative</span></div>
+          <div class="code-line"><span class="line-num">9</span><span class="line-content md-text">markdown editor. The editor supports real-time collaboration,</span></div>
+          <div class="code-line"><span class="line-num">10</span><span class="line-content md-text">version history, and inline commenting.<span class="collab-cursor cursor-jd"><span class="cursor-label">Jamie D.</span></span></span></div>
+          <div class="code-line"><span class="line-num">11</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">12</span><span class="line-content md-h2">## Key Features</span></div>
+          <div class="code-line"><span class="line-num">13</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">14</span><span class="line-content md-text"><span class="md-list">-</span> Real-time cursor presence and selections</span></div>
+          <div class="code-line"><span class="line-num">15</span><span class="line-content md-text"><span class="md-list">-</span> Inline threaded comments on any line</span></div>
+          <div class="code-line"><span class="line-num">16</span><span class="line-content md-text"><span class="md-list">-</span> <span class="selection-sk">Version history with diff view</span><span class="collab-cursor cursor-sk"><span class="cursor-label">Sam K.</span></span></span></div>
+          <div class="code-line"><span class="line-num">17</span><span class="line-content md-text"><span class="md-list">-</span> Split-pane editing (source + preview)</span></div>
+          <div class="code-line"><span class="line-num">18</span><span class="line-content md-text"><span class="md-list">-</span> File tree with multi-doc workspaces</span></div>
+          <div class="code-line"><span class="line-num">19</span><span class="line-content md-text"><span class="md-list">-</span> Markdown toolbar with shortcuts</span></div>
+          <div class="code-line"><span class="line-num">20</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">21</span><span class="line-content md-h2">## Timeline</span></div>
+          <div class="code-line"><span class="line-num">22</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">23</span><span class="line-content md-text">| Phase | Status |</span></div>
+          <div class="code-line"><span class="line-num">24</span><span class="line-content md-text">|-------|--------|</span></div>
+          <div class="code-line"><span class="line-num">25</span><span class="line-content md-text">| Core editor engine | <span class="md-code">`Done`</span> |</span></div>
+          <div class="code-line"><span class="line-num">26</span><span class="line-content md-text">| Real-time sync (CRDT) | <span class="md-code">`Done`</span> |</span></div>
+          <div class="code-line"><span class="line-num">27</span><span class="line-content md-text">| Comments and threads | <span class="md-code">`In Progress`</span> |</span></div>
+          <div class="code-line"><span class="line-num">28</span><span class="line-content md-text">| Version history | <span class="md-code">`In Progress`</span> |</span></div>
+          <div class="code-line"><span class="line-num">29</span><span class="line-content md-text">| Permissions and sharing | <span class="md-code">`Not Started`</span> |</span></div>
+          <div class="code-line"><span class="line-num">30</span><span class="line-content md-text">| Beta launch | <span class="md-code">`Not Started`</span> |</span></div>
+          <div class="code-line"><span class="line-num">31</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">32</span><span class="line-content md-h2">## Open Questions</span></div>
+          <div class="code-line"><span class="line-num">33</span><span class="line-content md-text"></span></div>
+          <div class="code-line"><span class="line-num">34</span><span class="line-content md-text"><span class="md-list">1.</span> Should we support <span class="md-link">[Mermaid diagrams](https://mermaid.js.org)</span>?</span></div>
+          <div class="code-line"><span class="line-num">35</span><span class="line-content md-text"><span class="md-list">2.</span> Offline-first or always-online for v1?</span></div>
+          <div class="code-line"><span class="line-num">36</span><span class="line-content md-text"><span class="md-list">3.</span> Export to PDF/DOCX in scope for launch?</span></div>
+        </div>
+      </div>
+
+      <!-- Preview Pane -->
+      <div class="preview-pane">
+        <h1>Product Launch Plan</h1>
+        <p>Target launch date: <strong>March 28, 2026</strong><br>Status: <code>In Progress</code></p>
+
+        <h2>Overview</h2>
+        <p>This document outlines the launch plan for the collaborative markdown editor. The editor supports real-time collaboration, version history, and inline commenting.</p>
+
+        <h2>Key Features</h2>
+        <ul>
+          <li>Real-time cursor presence and selections</li>
+          <li>Inline threaded comments on any line</li>
+          <li>Version history with diff view</li>
+          <li>Split-pane editing (source + preview)</li>
+          <li>File tree with multi-doc workspaces</li>
+          <li>Markdown toolbar with shortcuts</li>
+        </ul>
+
+        <h2>Timeline</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;">
+          <tr style="border-bottom:2px solid #30363d;text-align:left;">
+            <th style="padding:8px;color:#e6edf3;">Phase</th>
+            <th style="padding:8px;color:#e6edf3;">Status</th>
+          </tr>
+          <tr style="border-bottom:1px solid #21262d;"><td style="padding:6px 8px;color:#9198a1;">Core editor engine</td><td style="padding:6px 8px;"><code>Done</code></td></tr>
+          <tr style="border-bottom:1px solid #21262d;"><td style="padding:6px 8px;color:#9198a1;">Real-time sync (CRDT)</td><td style="padding:6px 8px;"><code>Done</code></td></tr>
+          <tr style="border-bottom:1px solid #21262d;"><td style="padding:6px 8px;color:#9198a1;">Comments and threads</td><td style="padding:6px 8px;"><code>In Progress</code></td></tr>
+          <tr style="border-bottom:1px solid #21262d;"><td style="padding:6px 8px;color:#9198a1;">Version history</td><td style="padding:6px 8px;"><code>In Progress</code></td></tr>
+          <tr style="border-bottom:1px solid #21262d;"><td style="padding:6px 8px;color:#9198a1;">Permissions and sharing</td><td style="padding:6px 8px;"><code>Not Started</code></td></tr>
+          <tr><td style="padding:6px 8px;color:#9198a1;">Beta launch</td><td style="padding:6px 8px;"><code>Not Started</code></td></tr>
+        </table>
+
+        <h2>Open Questions</h2>
+        <ol style="margin:0 0 12px 20px;color:#9198a1;font-size:14px;line-height:1.8;">
+          <li>Should we support <a href="https://mermaid.js.org">Mermaid diagrams</a>?</li>
+          <li>Offline-first or always-online for v1?</li>
+          <li>Export to PDF/DOCX in scope for launch?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments Panel -->
+  <div class="comments-panel">
+    <div class="comments-header">
+      Comments <span class="comment-count">3</span>
+    </div>
+    <div class="comments-list">
+      <div class="comment">
+        <div class="comment-line-ref">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="#7d8590"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+          Line 10
+        </div>
+        <div class="comment-meta">
+          <div class="comment-avatar avatar-sk" style="width:20px;height:20px;font-size:9px;">SK</div>
+          <span class="comment-author">Sam K.</span>
+          <span class="comment-time">2 min ago</span>
+        </div>
+        <div class="comment-body">Should we mention CRDT vs OT trade-offs in the overview? Might help set expectations.</div>
+      </div>
+
+      <div class="comment">
+        <div class="comment-line-ref">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="#7d8590"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+          Line 29
+        </div>
+        <div class="comment-meta">
+          <div class="comment-avatar avatar-jd" style="width:20px;height:20px;font-size:9px;">JD</div>
+          <span class="comment-author">Jamie D.</span>
+          <span class="comment-time">5 min ago</span>
+        </div>
+        <div class="comment-body">Permissions should be higher priority. We need at least view/edit roles before beta.</div>
+      </div>
+
+      <div class="comment comment-resolved">
+        <div class="comment-line-ref">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="#7d8590"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+          Line 3 &middot; Resolved
+        </div>
+        <div class="comment-meta">
+          <div class="comment-avatar avatar-ml" style="width:20px;height:20px;font-size:9px;">ML</div>
+          <span class="comment-author">Morgan L.</span>
+          <span class="comment-time">12 min ago</span>
+        </div>
+        <div class="comment-body">Updated the launch date to March 28.</div>
+      </div>
+    </div>
+    <div class="comment-input-wrap">
+      <textarea class="comment-input" placeholder="Add a comment..." rows="2"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom Bar -->
+<div class="bottombar">
+  <div class="bottombar-item">
+    <span class="presence-dot online"></span>
+    4 online
+  </div>
+  <div class="bottombar-item">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/></svg>
+    Markdown
+  </div>
+  <div class="bottombar-item">Ln 10, Col 42</div>
+  <div class="bottombar-right">
+    <div class="bottombar-item">UTF-8</div>
+    <div class="bottombar-item">LF</div>
+    <div class="bottombar-item">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+      v0.14.2
+    </div>
+  </div>
+</div>
+
+<!-- Version history toast -->
+<div class="version-toast">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0ZM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm.5 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 .37.65l2.5 1.5a.75.75 0 1 0 .76-1.3L8.5 7.96V4.75Z"/></svg>
+  Auto-saved &middot; 47 versions &middot; Last edit by Jamie D.
+</div>
+
+</body>
+</html>
